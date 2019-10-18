@@ -31,6 +31,8 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
         self.delegate = self;
     }
     
+    self.placeholder = @"ff";
+    
     return self;
 }
 
@@ -158,15 +160,38 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
 
 - (void)reactSetFrame:(CGRect)frame
 {
-  [super reactSetFrame:frame];
-    
-    horizontalOffsetCenter = [self positionAdjustmentForSearchBarIcon: UISearchBarIconSearch].horizontal;
-    
-    animationPartLength = horizontalOffsetCenter/(animationDuration ? animationDuration : 0.21)/60;
+    [super reactSetFrame:frame];
+    [self settingAnimation: frame];
 }
 
-- (void)setAnimationDuration:(CGFloat) newAnimationDuration {
-    animationDuration = newAnimationDuration;
+- (void) settingAnimation:(CGRect) frame
+{
+    UITextField *searchField = [self valueForKey:@"searchField"];
+        
+    CGFloat searchBarWidth = frame.size.width;
+    CGFloat placeholderIconWidth = searchField.leftView.frame.size.width;
+    CGFloat placeHolderWidth = [searchField.attributedPlaceholder size].width;
+    
+    // FIXME, hard code!!!
+    CGFloat offsetIconToPlaceholder = 8.0;
+    CGFloat placeHolderWithIcon = placeholderIconWidth + offsetIconToPlaceholder;
+    
+    UIOffset offset = UIOffsetMake(((searchBarWidth / 2) - (placeHolderWidth / 2) - placeHolderWithIcon), 0);
+    
+    [self setPositionAdjustment: offset forSearchBarIcon: UISearchBarIconSearch];
+    
+    horizontalOffsetCenter = offset.horizontal;
+    
+    animationPartLength = horizontalOffsetCenter/animationDuration/60;
+}
+
+- (void)setAnimationDuration:(CGFloat) value {
+    animationDuration = value;
+}
+
+- (CGFloat) animationDuration
+{
+    return animationDuration ? 0.21 : animationDuration;
 }
 
 @end

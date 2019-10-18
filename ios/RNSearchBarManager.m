@@ -49,28 +49,7 @@ RCT_EXPORT_MODULE()
 RCT_EXPORT_VIEW_PROPERTY(onSearchButtonPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onCancelButtonPress, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(animationDuration, CGFloat)
-RCT_CUSTOM_VIEW_PROPERTY(placeholder, NSString, RNSearchBar)
-{
-    NSString *placeholder = [RCTConvert NSString:json];
-    view.placeholder = placeholder;
-    
-    UITextField *searchField = [view valueForKey:@"searchField"];
-    
-    // FIXME, hard code!!!
-    CGFloat margin = 16.0;
-    
-    CGFloat searchBarWidth = [UIScreen mainScreen].bounds.size.width-margin;
-    CGFloat placeholderIconWidth = searchField.leftView.frame.size.width;
-    CGFloat placeHolderWidth = [searchField.attributedPlaceholder size].width;
-    
-    // FIXME, hard code!!!
-    CGFloat offsetIconToPlaceholder = 12.0;
-    CGFloat placeHolderWithIcon = placeholderIconWidth + offsetIconToPlaceholder;
-    
-    UIOffset offset = UIOffsetMake(((searchBarWidth / 2) - (placeHolderWidth / 2) - placeHolderWithIcon), 0);
-    
-    [view setPositionAdjustment: offset forSearchBarIcon: UISearchBarIconSearch];
-}
+RCT_EXPORT_VIEW_PROPERTY(placeholder, NSString)
 RCT_EXPORT_VIEW_PROPERTY(text, NSString)
 RCT_CUSTOM_VIEW_PROPERTY(showsCancelButton, BOOL, RNSearchBar)
 {
@@ -133,7 +112,7 @@ RCT_CUSTOM_VIEW_PROPERTY(textFieldBackgroundColor, UIColor, RNSearchBar)
         UIGraphicsEndImageContext();
         
         [view setSearchFieldBackgroundImage:image forState:UIControlStateNormal];
-        [view setSearchTextPositionAdjustment:UIOffsetMake(8.0, 0.0)];
+        // [view setSearchTextPositionAdjustment:UIOffsetMake(8.0, 0.0)];
     }
 }
 
