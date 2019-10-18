@@ -165,4 +165,8 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
     animationPartLength = horizontalOffsetCenter/(animationDuration ? animationDuration : 0.21)/60;
 }
 
+- (void)setAnimationDuration:(CGFloat) newAnimationDuration {
+    animationDuration = newAnimationDuration;
+}
+
 @end
