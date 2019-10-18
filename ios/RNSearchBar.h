@@ -7,6 +7,7 @@
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
 
+@property(nonatomic) CGFloat animationDuration;
 @property(nonatomic) BOOL _jsShowsCancelButton;
 @property(nonatomic, copy) RCTBubblingEventBlock onSearchButtonPress;
 @property(nonatomic, copy) RCTBubblingEventBlock onCancelButtonPress;

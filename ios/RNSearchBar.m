@@ -24,7 +24,6 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
-    animationDuration = 0.21;
     timerInterval = 1.0/60;
     
     if ((self = [super initWithFrame:CGRectMake(0, 0, 1000, 44)])) {
@@ -162,7 +161,8 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
   [super reactSetFrame:frame];
     
     horizontalOffsetCenter = [self positionAdjustmentForSearchBarIcon: UISearchBarIconSearch].horizontal;
-    animationPartLength = horizontalOffsetCenter/animationDuration/60;
+    
+    animationPartLength = horizontalOffsetCenter/(animationDuration ? animationDuration : 0.21)/60;
 }
 
 @end
