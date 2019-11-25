@@ -17,6 +17,7 @@
     CGFloat animationDuration;
     CGFloat animationPartLength;
     CGFloat timerInterval;
+    Boolean isLtr;
 }
 
 RCT_NOT_IMPLEMENTED(-initWithFrame:(CGRect)frame)
@@ -31,7 +32,13 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
         self.delegate = self;
     }
     
-    self.placeholder = @"ff";
+    self.placeholder = @"search";
+    
+    if (@available(iOS 9.0, *)) {
+        isLtr = [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionLeftToRight;
+    } else {
+        isLtr = [UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionLeftToRight;
+    }
     
     return self;
 }
@@ -44,7 +51,7 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
                                         key:nil
                                  eventCount:_nativeEventCount];
     
-    if ([self.text length] == 0) {
+    if (isLtr && [self.text length] == 0) {
         [self startAnimationToCenter];
     }
 }
@@ -61,7 +68,7 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
                                         key:nil
                                  eventCount:_nativeEventCount];
     
-    if ([self.text length] == 0) {
+    if (isLtr && [self.text length] == 0) {
         [self startAnimationToLeft];
     }
 }
@@ -85,7 +92,7 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
                                @"searchText": searchBar.text
                                });
     
-    if ([self.text length] == 0) {
+    if (isLtr && [self.text length] == 0) {
         [self startAnimationToCenter];
     }
 }
@@ -99,7 +106,9 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
     
     self.onCancelButtonPress(@{});
     
-    [self startAnimationToCenter];
+    if (isLtr) {
+        [self startAnimationToCenter];
+    }
 }
 
 - (void)startAnimationToLeft;
@@ -127,7 +136,7 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
         _timer = nil;
     }
     
-    [self setPositionAdjustment: UIOffsetMake(currentHorizontalOffset,0) forSearchBarIcon: UISearchBarIconSearch];
+    [self setPositionAdjustment: UIOffsetMake(currentHorizontalOffset, 0) forSearchBarIcon: UISearchBarIconSearch];
 }
 
 - (void)startAnimationToCenter;
@@ -155,13 +164,15 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
         _timer = nil;
     }
     
-    [self setPositionAdjustment: UIOffsetMake(currentHorizontalOffset,0) forSearchBarIcon: UISearchBarIconSearch];
+    [self setPositionAdjustment: UIOffsetMake(currentHorizontalOffset, 0) forSearchBarIcon: UISearchBarIconSearch];
 }
 
 - (void)reactSetFrame:(CGRect)frame
 {
     [super reactSetFrame:frame];
-    [self settingAnimation: frame];
+    if (isLtr) {
+        [self settingAnimation: frame];
+    }
 }
 
 - (void) settingAnimation:(CGRect) frame
